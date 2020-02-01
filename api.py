@@ -13,17 +13,6 @@ from flask import jsonify, request, abort, make_response
 app=flask.Flask(__name__)
 app.config["DEBUG"]=True
 
-
-blog_entries= [
-   {'post_id': 1,
-    'title': 'Still Raining Today',
-    'body': 'First blog entry'},
-   {'post_id': 2,
-    'title': 'Sun Came Out',
-    'body': 'This is the second blog entry'}
-]
-
-
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
@@ -38,8 +27,9 @@ def home():
 def get():
     #return json.dumps(blog_entries, sort_keys=False)
     #Json has better formatting below but is sorted
-    database_get()
-    return jsonify({'blog_entries': blog_entries})
+    blog_entries=database_get()
+    return blog_entries
+    #return jsonify({'blog_entries': blog_entries})
 
 @app.route('/api/v1/blog_entries',methods=['POST'])
 def post():
@@ -53,21 +43,19 @@ def post():
     return jsonify({'post_list': new_post}), 201
     #return "status.HTTP_201_CREATED and new post is "
 
+def database_dictionary(cursor,row):
+    posts_dictionary={}
+    for index, column in enumerate(cursor.description):
+        posts_dictionary[column[0]]=row[index]
+    return posts_dictionary
+
 def database_get():
     db_connection=sqlite3.connect("blog.db")
-    print("Database connection was successful\n")
-
-    all_records=db_connection.execute("select * from posts;")
-
-    return_json=""
-    return_json="{'blog_entries': ["
-    for record in all_records:
-        return_json+="{'post_id': " + str(record[0]) + ", 'title': '" + str(record[1]) + "', 'body': '" + str(record[2]) + "'}, "
-    #remove trailing space and comma off the end of the string
-    return_json=(return_json.rstrip(" ,"))
-    return_json+="],}\n"
-    print(return_json + "\n\n")
-
+    #print("Database connection was successful\n")
+    db_connection.row_factory=database_dictionary
+    cursor=db_connection.cursor()
+    all_records=cursor.execute("select * from posts;").fetchall()
+    return jsonify({'blog_entries' : all_records})
     db_connection.close()
 
 def database_post(title,body):
@@ -85,3 +73,4 @@ def database_post(title,body):
 
 if __name__ == '__main__':
     app.run()
+
