@@ -1,8 +1,8 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 
 # Coding Sample for NWEA by Melissa Cunningham
-# Objective: Build a blog post API
-# Provide an API that will write single posts to the database and retrieve a list of all posts from the database.
+# Contents: A blog post API that 1)writes single posts to a database and
+# 2)retrieves a list of all posts from a database.
 
 import requests
 import flask
@@ -13,62 +13,51 @@ from flask import jsonify, request, abort, make_response
 app=flask.Flask(__name__)
 app.config["DEBUG"]=True
 
+# Route for /posts
+@app.route('/posts',methods=['GET'])
+def get():
+    blog_entries=database_get()
+    return blog_entries
+
+# Route for /post
+@app.route('/post',methods=['POST'])
+def post():
+    # requiring title, body and a json type request
+    if not request.json or not 'title' in request.json or not 'body' in request.json:
+        abort(400)
+    new_post = {
+        'title': request.json['title'],
+        'body': request.json['body']
+    }
+    database_post(new_post["title"], new_post["body"])
+    return jsonify({'post_list': new_post}), 201
+
+# Routing for all other cases
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-@app.route('/',methods=['GET'])
-def home():
-    web_string="<h1>Desmond is the COOLEST!!!</h1><p>He loves pizza and LEGOS!</p>"
-    return web_string
-    #return "<h1>Desmond is the COOLEST!!!</h1><p>He loves pizza and LEGOS!</p>"
-
-@app.route('/api/v1/blog_entries/all',methods=['GET'])
-def get():
-    #return json.dumps(blog_entries, sort_keys=False)
-    #Json has better formatting below but is sorted
-    blog_entries=database_get()
-    return blog_entries
-    #return jsonify({'blog_entries': blog_entries})
-
-@app.route('/api/v1/blog_entries',methods=['POST'])
-def post():
-    if not request.json or not 'title' in request.json:
-        abort(400)
-    new_post = {
-        'title': request.json['title'],
-        'body': request.json.get('body', "")
-    }
-    database_post("some_title1", "some_body1")
-    return jsonify({'post_list': new_post}), 201
-    #return "status.HTTP_201_CREATED and new post is "
-
+# Dictionary for row_factory use in database_get
 def database_dictionary(cursor,row):
     posts_dictionary={}
     for index, column in enumerate(cursor.description):
         posts_dictionary[column[0]]=row[index]
     return posts_dictionary
 
+# Connect to db and get all posts
 def database_get():
     db_connection=sqlite3.connect("blog.db")
-    #print("Database connection was successful\n")
     db_connection.row_factory=database_dictionary
     cursor=db_connection.cursor()
     all_records=cursor.execute("select * from posts;").fetchall()
     return jsonify({'blog_entries' : all_records})
     db_connection.close()
 
+# Connect to db and insert new post
 def database_post(title,body):
-    print(title + " " + body)
-
     db_connection=sqlite3.connect("blog.db")
-    print("Database connection was successful\n")
-
     db_connection.execute("insert into posts('title','body') values('" + title + "','" + body + "');")
     db_connection.commit()
-    #get exit code
-    print("Insertion was successful\n\n")
-
     db_connection.close()
 
 if __name__ == '__main__':
