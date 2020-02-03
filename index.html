@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+   <head>
+      <title>Blog Entries Api</title>
+      <link rel="stylesheet" href="styles.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+      </script>
+   </head>
+
+   <body>
+      <h1>Blog Entries Api</h1>
+      <p></p>
+      <h2>Endpoints</h2>
+      <table style="width:75%","background-color: #0f0">
+      <col width="25">
+      <tr><th>Endpoint</th><th>Method</th><th>What It Does</th></tr>
+      <tr><td>/posts</td><td>GET</td>
+      <td>Returns array of all blog posts in the blog.db</td></tr>
+      <tr><td>/post</td><td>POST</td>
+      <td>Inserts new blog post record into the blog.db</td></tr>
+      </table>
+
+      <br>
+      <h3>Endpoint Examples</h3>
+      <table style="width:75%">
+      <col width="25">
+      <tr><th colspan="2">Posts Endpoint</th></tr>
+      <tr><td>Request</td><td>curl -i http://localhost:5000/posts</td></tr>
+      <tr><td>Response</td><td>
+      <p>HTTP/1.0 200 OK</p><p>Content-Type: application/json</p><p>Content-Length: 571</p><p>Server: Werkzeug/0.16.1 Python/3.7.6</p><p>Date: Mon, 03 Feb 2020 04:56:41 GMT</p><p>
+      {
+        "blog_entries": [
+          {
+            "body": "Blog body1", 
+            "post_id": 1, 
+            "title": "Title1"
+          }, 
+          {
+            "body": "Blog body2", 
+            "post_id": 2, 
+            "title": "Title2"
+          } 
+        ]
+      }</p>
+      </td></tr>
+      <tr><td>Live Link</td><td>
+      <p><a href="http://127.0.0.1:5000/posts">Click here for a list of all blog entries</a></p>
+      <p>* This requires apache server and python script to be running (see Set Up section)</p></td></tr>
+      </table>
+      <br>
+      <table style="width:75%">
+      <col width="25">
+      <tr><th colspan="2">Post Endpoint</th></tr>
+      <tr><td>Request</td><td>curl -i -H "Content-Type: application/json" -X POST -d '{"title":"This is a blog title","body":"This is a blog entry"}' http://localhost:5000/post</td></tr>
+      <tr><td>Response</td><td><p>HTTP/1.0 201 CREATED</p><p>Content-Type: application/json</p><p>Content-Length: 74</p><p>Server: Werkzeug/0.16.1 Python/3.7.6</p><p>Date: Mon, 03 Feb 2020 04:48:56 GMT</p><p>{ "post_list": { "body": "This is a blog entry", "title": "This is a blog title" } }</td></tr>
+      <tr><td>Live Link</td><td>You'll see plenty of attempts in this file to capture form data and do a POST with it. I don't think this is a requirement but it would be neat to figure out. Still a WIP.</td></tr>
+      </table>
+
+
+
+
+
+      <!-- <form method="GET" action="http:/127.0.0.1:5000/posts"> -->
+      <!-- </form> -->
+
+      <!-- <input type=submit name="click" value="Click to see all blog entries" -->
+
+      <!-- <a href="http://127.0.0.1:5000/posts">Click here for a list of all blog entries</a> -->
+      <p></p><br>
+<!--      <p>Fill in and submit the form below to enter a new blog entry</p> -->
+      <!-- <form method="post" action="/post.js" enctype="multipart/form-data"> -->
+      <!-- <form name="blog_entry" method="get" action="posted.html"> -->
+        <!-- <form id="blog_entry" action="posted.html"> -->
+      <!--   Title: <input type="text" id="title" name="title" value=""/><br> -->
+      <!--   Body: <input type="text" id="body" name="body" value=""/><br> -->
+         <!-- Body: <input type="text" name="body"><br> -->
+      <!--   <input type="button" name="submit" onclick="redirectToPostUrl()" value="Post Blog Entry"/> -->
+      <!-- </form> -->
+      <!-- <a href="http://127.0.0.1:5000/posts">Click here to add a blog entry</a> -->
+         <!-- #document.getElementById("blog_entry").submit(); -->
+
+<!--  <script type="text/javascript">  
+         function redirectToPostUrl(){   
+            var title = $('#title').val();   
+            var body = $('#body').val();  
+            window.location = 'http://www.cnn.com/'+title+'/'+body;  
+            return false;  
+         }  
+      </script>  -->
+
+
+<!--  <input id="submitbutton" type="submit" value="Test Send Data">
+      <script type="text/javascript"> 
+      function runPyScript(input){
+         var jqXHR = $.ajax({
+            type: "POST",
+            url: "/tester",
+            async: false,
+            data: { mydata: input }
+         });
+         return jqXHR.responseText;
+      }
+
+      $('#submitbutton').click(function(){
+         datatosend = 'this is my matrix';
+         result = runPyScript(datatosend);
+         console.log('Got back ' + result);
+      });
+
+      </script> -->
+
+
+   </body>
+</html>

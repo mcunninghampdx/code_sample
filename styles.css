@@ -1,0 +1,16 @@
+html {
+   font-family: 'Dosis', sans-serif;
+   line-height: 1.6;
+   color: #666;
+   background: #F6F6F6;
+}
+
+table, th, td {
+   border: 1px solid black;
+}
+
+th, td {
+   text-align: left;
+   padding: 15px;
+}
+
