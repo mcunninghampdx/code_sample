@@ -13,11 +13,14 @@
       <h2>Endpoints</h2>
       <table style="width:75%","background-color: #0f0">
       <col width="25">
-      <tr><th>Endpoint</th><th>Method</th><th>What It Does</th></tr>
+      <col width="25">
+      <tr><th>Endpoint</th><th>Method</th><th>What It Does</th><th>Required Fields</th></tr>
       <tr><td>/posts</td><td>GET</td>
-      <td>Returns array of all blog posts in the blog.db</td></tr>
+      <td>Returns array of all blog posts in the blog.db</td>
+      <td>none</td></tr>
       <tr><td>/post</td><td>POST</td>
-      <td>Inserts new blog post record into the blog.db</td></tr>
+      <td>Inserts new blog post record into the blog.db</td>
+      <td>title, body</td></tr>
       </table>
 
       <br>
