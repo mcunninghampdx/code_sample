@@ -9,6 +9,7 @@ import flask
 import json
 import sqlite3
 from flask import jsonify, request, abort, make_response
+from flask import Flask, render_template, redirect, url_for
 
 app=flask.Flask(__name__)
 app.config["DEBUG"]=True
@@ -32,6 +33,17 @@ def post():
     database_post(new_post["title"], new_post["body"])
     return jsonify({'post_list': new_post}), 201
 
+# WIP route being used for trying to get form POST data into python functions
+@app.route('/tester',methods=['POST'])
+def tester():
+    message = None
+    datafromjs = request.form['mydata']
+    result = "success!"
+    web_response = make_response('{"message": [{"response": "'+result+'"}]}')
+    web_response.headers['Content-Type'] = "application/json"
+    return web_response
+    #return render_template('happy.html')
+    
 # Routing for all other cases
 @app.errorhandler(404)
 def not_found(error):
