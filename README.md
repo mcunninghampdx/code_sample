@@ -43,9 +43,10 @@ Apache, SQLite, Python, Flask, git, and an internet browser have to be installed
 * On the homepage, click the link to expose the /posts endpoint. The returned JSON should match the response from the /posts curl command tried in a previous step. 
 * At the command line, both the /posts and /post endpoints using curl should still work
 
-5. Issues? Check the logs:
-* Apache logs: /var/log/apache2/ directory
-* Python issues (including SQLite issues) will print to screen that is running python3 api.py
+5. Issues?
+* Load the index.html Blog API page endpoint information. NOTE: This can be done without being connected (by using File->Open in your internet browser).
+* Check the Apache logs: /var/log/apache2/ directory
+* Python issues (including SQLite issues) will print to the screen that is running python3 api.py
 
 POSTS CURL COMMAND: curl -i http://localhost:5000/posts 
 
